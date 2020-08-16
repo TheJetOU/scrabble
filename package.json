@@ -1,0 +1,29 @@
+{
+    "name": "scrabble",
+    "version": "0.0.1",
+    "description": "A minimal scrabble simulator",
+    "main": "scrabble",
+    "scripts": {
+        "test": "subpkg run jest",
+        "compile": "subpkg run compile",
+        "format": "subpkg run format",
+        "lint": "subpkg run lint"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/TheJetOU/scrabble.git"
+    },
+    "author": "Waleed Hassan",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/TheJetOU/scrabble/issues"
+    },
+    "homepage": "https://github.com/TheJetOU/scrabble#readme",
+    "dependencies": {
+        "subpkg": "^3.0.3",
+        "scrabble-sim": "file:sim"
+    },
+    "subPackages": [
+        "sim"
+    ]
+}
