@@ -1,4 +1,5 @@
 import { Player } from "./common";
+import { Log } from "./log";
 
 export const TILES = {
     BLANK: 2,
@@ -44,14 +45,14 @@ export class Tiles {
 
     exchangeTiles(player: Player, tiles: Tile[]) {
         if (tiles.length > 7 && tiles.length < 1) {
-            throw new Error("Can only exchange one to seven tiles");
+            Log.error("Can only exchange one to seven tiles");
         }
         const tileCharacters = Object.keys(TILES) as Tile[];
         if (tiles.length < tileCharacters.length) {
-            throw new Error("Trying to take more tiles than available in the bag");
+            Log.error("Trying to take more tiles than available in the bag");
         }
         if (tileCharacters.length < 6) {
-            throw new Error("Cannot exchange tiles if six or fewer tiles remain");
+            Log.error("Cannot exchange tiles if six or fewer tiles remain");
         }
         for (const [idx, tile] of tiles.entries()) {
             const newTile = this.getTiles(1);

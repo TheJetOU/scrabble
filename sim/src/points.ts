@@ -1,5 +1,6 @@
 import { SquareType } from "./board";
 import { Player } from "./common";
+import { Log } from "./log";
 
 // Letter -> Points it gives
 const LETTER_POINTS: { [letter: string]: number } = {
@@ -47,7 +48,7 @@ export class Points {
      */
     givePoints(player: Player, word: string, squareTypes: { [squareType in SquareType]: string }) {
         if (!this.players.has(player)) {
-            throw new Error(`Attempted to add points for non-existent player: ${player}`);
+            Log.error(`Attempted to add points for non-existent player: ${player}`);
         }
         let points = word.split("").reduce((prev, cur) => prev + Points.letter(cur), 0);
         // Word multipliers are applied last move the to the end
@@ -73,7 +74,7 @@ export class Points {
                     points *= 3;
                     break;
                 default:
-                    throw new Error(`Attempted to use non-existent square type: ${squareType}`);
+                    Log.error(`Attempted to use non-existent square type: ${squareType}`);
             }
         }
         if (sorted.length === 7) points += 50;
@@ -84,7 +85,7 @@ export class Points {
         if (tile === " ") tile = "BLANK";
         const points = LETTER_POINTS[tile];
         if (points === undefined) {
-            throw new Error(`Attempted to calculate points for non-existent tile: ${tile}`);
+            Log.error(`Attempted to calculate points for non-existent tile: ${tile}`);
         }
         return points;
     }
