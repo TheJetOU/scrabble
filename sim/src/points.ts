@@ -46,13 +46,13 @@ export class Points {
     /**
      * @param squareType Square Type -> [letter that hit it]
      */
-    givePoints(player: Player, word: string, squareTypes: { [squareType in SquareType]: string }) {
+    givePoints(player: Player, word: string, squareTypes: [SquareType, string][]) {
         if (!this.players.has(player)) {
             Log.error(`Attempted to add points for non-existent player: ${player}`);
         }
         let points = word.split("").reduce((prev, cur) => prev + Points.letter(cur), 0);
         // Word multipliers are applied last move the to the end
-        const sorted = Object.entries(squareTypes).sort((a, b) => {
+        const sorted = squareTypes.sort((a, b) => {
             if (a[0].includes("word") && !b[0].includes("word")) return -1;
             if (b[0].includes("word") && !a[0].includes("word")) return 1;
             return 0;

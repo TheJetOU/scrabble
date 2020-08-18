@@ -35,7 +35,7 @@ export type Tile = keyof typeof TILES;
 export class Tiles {
     private readonly bag = Object.assign({}, TILES);
 
-    constructor(private readonly players: Player[]) {}
+    constructor(private readonly players: Set<Player>) {}
 
     initialDraw() {
         for (const player of this.players) {
@@ -62,13 +62,14 @@ export class Tiles {
         }
     }
 
-    private getTiles(numberOfTiles: number) {
+    getTiles(numberOfTiles: number) {
         const tiles: Tile[] = [];
         for (let i = 0; i < numberOfTiles; i++) {
             const randomNumber = Math.floor(Math.random() * 27);
+            console.log((Object.entries(this.bag) as [Tile, number][])[randomNumber][0]);
             const [tile, left] = (Object.entries(this.bag) as [Tile, number][])[randomNumber];
             if (left === 0) {
-                i -= 1;
+                i--;
                 continue;
             }
             this.bag[tile] -= 1;
