@@ -18,4 +18,4 @@ export const Log = {
     },
 };
 
-export const readStream = readable.on;
+export const readStream = readable;

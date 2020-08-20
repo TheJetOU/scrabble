@@ -1,308 +1,67 @@
-import { Tile, Tiles } from "./tiles";
-import { Player } from "./common";
+import { Tile } from "./tiles";
+import { Square } from "./square";
 import { Log } from "./log";
-import { Points } from "./points";
-
-export type SquareType =
-    | "regular"
-    | "doubleletterscore"
-    | "tripleletterscore"
-    | "doublewordscore"
-    | "triplewordscore";
-
-interface Square {
-    type: SquareType;
-    tile?: Tile;
-}
-
-type Squares = { [cell: string]: Square };
-
-const SQUARES: Squares = {
-    A1: { type: "triplewordscore" },
-    A2: { type: "regular" },
-    A3: { type: "regular" },
-    A4: { type: "doubleletterscore" },
-    A5: { type: "regular" },
-    A6: { type: "regular" },
-    A7: { type: "regular" },
-    A8: { type: "triplewordscore" },
-    A9: { type: "regular" },
-    A10: { type: "regular" },
-    A11: { type: "regular" },
-    A12: { type: "doubleletterscore" },
-    A13: { type: "regular" },
-    A14: { type: "regular" },
-    A15: { type: "triplewordscore" },
-
-    B1: { type: "regular" },
-    B2: { type: "doublewordscore" },
-    B3: { type: "regular" },
-    B4: { type: "regular" },
-    B5: { type: "regular" },
-    B6: { type: "tripleletterscore" },
-    B7: { type: "regular" },
-    B8: { type: "regular" },
-    B9: { type: "regular" },
-    B10: { type: "tripleletterscore" },
-    B11: { type: "regular" },
-    B12: { type: "regular" },
-    B13: { type: "regular" },
-    B14: { type: "doublewordscore" },
-    B15: { type: "regular" },
-
-    C1: { type: "regular" },
-    C2: { type: "regular" },
-    C3: { type: "doublewordscore" },
-    C4: { type: "regular" },
-    C5: { type: "regular" },
-    C6: { type: "regular" },
-    C7: { type: "doubleletterscore" },
-    C8: { type: "regular" },
-    C9: { type: "doubleletterscore" },
-    C10: { type: "regular" },
-    C11: { type: "regular" },
-    C12: { type: "regular" },
-    C13: { type: "doublewordscore" },
-    C14: { type: "regular" },
-    C15: { type: "regular" },
-
-    D1: { type: "doubleletterscore" },
-    D2: { type: "regular" },
-    D3: { type: "regular" },
-    D4: { type: "doublewordscore" },
-    D5: { type: "regular" },
-    D6: { type: "regular" },
-    D7: { type: "regular" },
-    D8: { type: "doubleletterscore" },
-    D9: { type: "regular" },
-    D10: { type: "regular" },
-    D11: { type: "regular" },
-    D12: { type: "doublewordscore" },
-    D13: { type: "regular" },
-    D14: { type: "regular" },
-    D15: { type: "doubleletterscore" },
-
-    E1: { type: "regular" },
-    E2: { type: "regular" },
-    E3: { type: "regular" },
-    E4: { type: "regular" },
-    E5: { type: "doublewordscore" },
-    E6: { type: "regular" },
-    E7: { type: "regular" },
-    E8: { type: "regular" },
-    E9: { type: "regular" },
-    E10: { type: "regular" },
-    E11: { type: "doublewordscore" },
-    E12: { type: "regular" },
-    E13: { type: "regular" },
-    E14: { type: "regular" },
-    E15: { type: "regular" },
-
-    F1: { type: "regular" },
-    F2: { type: "regular" },
-    F3: { type: "tripleletterscore" },
-    F4: { type: "regular" },
-    F5: { type: "regular" },
-    F6: { type: "tripleletterscore" },
-    F7: { type: "regular" },
-    F8: { type: "regular" },
-    F9: { type: "regular" },
-    F10: { type: "tripleletterscore" },
-    F11: { type: "regular" },
-    F12: { type: "regular" },
-    F13: { type: "regular" },
-    F14: { type: "tripleletterscore" },
-    F15: { type: "regular" },
-
-    G1: { type: "regular" },
-    G2: { type: "regular" },
-    G3: { type: "doubleletterscore" },
-    G4: { type: "regular" },
-    G5: { type: "regular" },
-    G6: { type: "regular" },
-    G7: { type: "doubleletterscore" },
-    G8: { type: "regular" },
-    G9: { type: "doubleletterscore" },
-    G10: { type: "regular" },
-    G11: { type: "regular" },
-    G12: { type: "regular" },
-    G13: { type: "doubleletterscore" },
-    G14: { type: "regular" },
-    G15: { type: "regular" },
-
-    H1: { type: "triplewordscore" },
-    H2: { type: "regular" },
-    H3: { type: "regular" },
-    H4: { type: "doubleletterscore" },
-    H5: { type: "regular" },
-    H6: { type: "regular" },
-    H7: { type: "regular" },
-    H8: { type: "doublewordscore" },
-    H9: { type: "regular" },
-    H10: { type: "regular" },
-    H11: { type: "regular" },
-    H12: { type: "doubleletterscore" },
-    H13: { type: "regular" },
-    H14: { type: "regular" },
-    H15: { type: "triplewordscore" },
-
-    I1: { type: "regular" },
-    I2: { type: "regular" },
-    I3: { type: "doubleletterscore" },
-    I4: { type: "regular" },
-    I5: { type: "regular" },
-    I6: { type: "regular" },
-    I7: { type: "doubleletterscore" },
-    I8: { type: "regular" },
-    I9: { type: "doubleletterscore" },
-    I10: { type: "regular" },
-    I11: { type: "regular" },
-    I12: { type: "regular" },
-    I13: { type: "doubleletterscore" },
-    I14: { type: "regular" },
-    I15: { type: "regular" },
-
-    J1: { type: "regular" },
-    J2: { type: "tripleletterscore" },
-    J3: { type: "regular" },
-    J4: { type: "regular" },
-    J5: { type: "regular" },
-    J6: { type: "tripleletterscore" },
-    J7: { type: "regular" },
-    J8: { type: "regular" },
-    J9: { type: "regular" },
-    J10: { type: "tripleletterscore" },
-    J11: { type: "regular" },
-    J12: { type: "regular" },
-    J13: { type: "regular" },
-    J14: { type: "tripleletterscore" },
-    J15: { type: "regular" },
-
-    K1: { type: "regular" },
-    K2: { type: "regular" },
-    K3: { type: "regular" },
-    K4: { type: "regular" },
-    K5: { type: "doublewordscore" },
-    K6: { type: "regular" },
-    K7: { type: "regular" },
-    K8: { type: "regular" },
-    K9: { type: "regular" },
-    K10: { type: "regular" },
-    K11: { type: "doublewordscore" },
-    K12: { type: "regular" },
-    K13: { type: "regular" },
-    K14: { type: "regular" },
-    K15: { type: "regular" },
-
-    L1: { type: "doubleletterscore" },
-    L2: { type: "regular" },
-    L3: { type: "regular" },
-    L4: { type: "doublewordscore" },
-    L5: { type: "regular" },
-    L6: { type: "regular" },
-    L7: { type: "regular" },
-    L8: { type: "doubleletterscore" },
-    L9: { type: "regular" },
-    L10: { type: "regular" },
-    L11: { type: "regular" },
-    L12: { type: "doublewordscore" },
-    L13: { type: "regular" },
-    L14: { type: "regular" },
-    L15: { type: "doubleletterscore" },
-
-    M1: { type: "regular" },
-    M2: { type: "regular" },
-    M3: { type: "doublewordscore" },
-    M4: { type: "regular" },
-    M5: { type: "regular" },
-    M6: { type: "regular" },
-    M7: { type: "doubleletterscore" },
-    M8: { type: "regular" },
-    M9: { type: "doubleletterscore" },
-    M10: { type: "regular" },
-    M11: { type: "regular" },
-    M12: { type: "regular" },
-    M13: { type: "doublewordscore" },
-    M14: { type: "regular" },
-    M15: { type: "regular" },
-
-    N1: { type: "regular" },
-    N2: { type: "doublewordscore" },
-    N3: { type: "regular" },
-    N4: { type: "regular" },
-    N5: { type: "regular" },
-    N6: { type: "tripleletterscore" },
-    N7: { type: "regular" },
-    N8: { type: "regular" },
-    N9: { type: "regular" },
-    N10: { type: "tripleletterscore" },
-    N11: { type: "regular" },
-    N12: { type: "regular" },
-    N13: { type: "regular" },
-    N14: { type: "doublewordscore" },
-    N15: { type: "regular" },
-
-    O1: { type: "triplewordscore" },
-    O2: { type: "regular" },
-    O3: { type: "regular" },
-    O4: { type: "doubleletterscore" },
-    O5: { type: "regular" },
-    O6: { type: "regular" },
-    O7: { type: "regular" },
-    O8: { type: "triplewordscore" },
-    O9: { type: "regular" },
-    O10: { type: "regular" },
-    O11: { type: "regular" },
-    O12: { type: "doubleletterscore" },
-    O13: { type: "regular" },
-    O14: { type: "regular" },
-    O15: { type: "triplewordscore" },
-};
 
 export class Board {
-    squares = Object.assign({}, SQUARES);
-    currentPlayerTurn: Player;
-    constructor(
-        public players: Set<Player>,
-        public turnOrder: Player[],
-        public points: Points,
-        public tiles: Tiles,
-    ) {
-        this.currentPlayerTurn = turnOrder[0];
-    }
-
+    private readonly squares = Square.all();
+    private firstMoveOccured = false;
+    /**
+     *
+     * @param startingCell
+     *  The cell you want to add the first tile in.
+     *  If the main word reads left-to-right, the row number precedes the column letter,
+     *  and if the main word reads top-to-bottom
+     */
     move(tiles: Tile[], startingCell: string) {
-        const isValidWord = () => {
-            return true;
-        };
-        const player = this.currentPlayerTurn;
-        const cellNames = Object.keys(this.squares);
         let dir: "forward" | "sideways" = "forward";
-        if (!parseInt(startingCell[0])) {
+        if (parseInt(startingCell[0])) {
             startingCell = startingCell.slice(1) + startingCell[0];
             dir = "sideways";
         }
-        const startingCellIdx = cellNames.indexOf(startingCell);
-        if (startingCellIdx === -1) Log.error(`Unknown starting cell: ${startingCell}`);
-        const squareTypesUsed: [SquareType, string][] = [];
+        const square = this.squares[startingCell];
+        if (this.firstMoveOccured && !square.adjacentTiles()?.length) {
+            Log.error(`In turns after one, you must place tiles adjacent to one another.`);
+        }
+        // Not enough space to add word
+        // FIXME: if you're adding tiles between two existing words to form one word, this won't work
+        if (
+            square[dir === "forward" ? "down" : "left"](tiles.length, true)?.some((val) => val.tile)
+        ) {
+            return;
+        }
         let word = "";
-        for (let i = 0; i < tiles.length; i++) {
-            const cell = cellNames[startingCellIdx + i];
-            const tile = this.squares[cell].tile;
-            if (tile) {
-                word += tile;
-            } else {
-                const squareType = this.squares[cellNames[startingCellIdx + i]].type;
-                squareTypesUsed.push([squareType, tiles[i]]);
-                word += tiles[i];
+        // TODO: Parallel words
+        if (dir === "sideways") {
+            let [leftCell, rightCell] = [square.left(), square.right()];
+            while (leftCell?.tile) {
+                word += leftCell.tile;
+                leftCell = leftCell.left();
+            }
+            while (rightCell?.tile) {
+                word += rightCell.tile;
+                rightCell = rightCell.right();
+            }
+        } else if (dir === "forward") {
+            let [downCell, upCell] = [square.down(), square.up()];
+            while (downCell?.tile) {
+                word += downCell.tile;
+                downCell = square.down();
+            }
+            while (upCell?.tile) {
+                word += upCell.tile;
+                upCell = square.up();
             }
         }
-        if (!isValidWord()) {
-            Log.error(`Invalid word: ${word}`);
+        word += tiles.join("");
+        const squaresUsed: Square[] = [];
+        for (const [idx, nextSquare] of square[dir === "forward" ? "down" : "left"](
+            tiles.length,
+            true,
+        ).entries()) {
+            this.squares[nextSquare.cell].tile = tiles[idx];
+            squaresUsed.push(nextSquare);
         }
-        // `Game` should probably be doing this shit
-        this.points.givePoints(player, word, squareTypesUsed);
-        player.tiles = player.tiles.filter((tile) => !tiles.includes(tile));
-        this.tiles.getTiles(tiles.length);
+        if (!this.firstMoveOccured) this.firstMoveOccured = true;
+        return { squaresUsed, word };
     }
 }

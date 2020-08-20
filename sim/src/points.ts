@@ -1,6 +1,4 @@
-import { SquareType } from "./board";
-import { Player } from "./common";
-import { Log } from "./log";
+import { Square } from "./square";
 
 // Letter -> Points it gives
 const LETTER_POINTS: { [letter: string]: number } = {
@@ -40,32 +38,27 @@ const LETTER_POINTS: { [letter: string]: number } = {
     Z: 10,
 };
 
-export class Points {
-    constructor(public players: Set<Player>) {}
-
+export const Points = {
     /**
-     * @param squareType Square Type -> [letter that hit it]
+     * @param squareType [Square Type -> [letter that hit it]][]
      */
-    givePoints(player: Player, word: string, squareTypes: [SquareType, string][]) {
-        if (!this.players.has(player)) {
-            Log.error(`Attempted to add points for non-existent player: ${player}`);
-        }
+    calculatePoints(word: string, squares: Square[]) {
         let points = word.split("").reduce((prev, cur) => prev + Points.letter(cur), 0);
         // Word multipliers are applied last move the to the end
-        const sorted = squareTypes.sort((a, b) => {
-            if (a[0].includes("word") && !b[0].includes("word")) return -1;
-            if (b[0].includes("word") && !a[0].includes("word")) return 1;
+        const sorted = squares.sort((a, b) => {
+            if (a.type.includes("word") && !b.type.includes("word")) return -1;
+            if (b.type.includes("word") && !a.type.includes("word")) return 1;
             return 0;
-        }) as [SquareType, string][];
-        for (const [squareType, letter] of sorted) {
-            switch (squareType) {
+        });
+        for (const { type, tile } of sorted) {
+            switch (type) {
                 case "regular":
                     break;
                 case "doubleletterscore":
-                    points += Points.letter(letter);
+                    points += Points.letter(tile!);
                     break;
                 case "tripleletterscore":
-                    points += Points.letter(letter) * 2;
+                    points += Points.letter(tile!) * 2;
                     break;
                 case "doublewordscore":
                     points *= 2;
@@ -74,19 +67,19 @@ export class Points {
                     points *= 3;
                     break;
                 default:
-                    Log.error(`Attempted to use non-existent square type: ${squareType}`);
+                    throw new Error(`Attempted to use non-existent square type: ${type}`);
             }
         }
         if (sorted.length === 7) points += 50;
-        player.points = points;
-    }
+        return points;
+    },
 
-    static letter(tile: string) {
+    letter(tile: string) {
         if (tile === " ") tile = "BLANK";
         const points = LETTER_POINTS[tile];
         if (points === undefined) {
-            Log.error(`Attempted to calculate points for non-existent tile: ${tile}`);
+            throw new Error(`Attempted to calculate points for non-existent tile: ${tile}`);
         }
         return points;
-    }
-}
+    },
+};

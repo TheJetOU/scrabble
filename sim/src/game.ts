@@ -1,27 +1,41 @@
 import { Player } from "./common";
-import { Tiles } from "./tiles";
+import { Tiles, Tile } from "./tiles";
 import { Board } from "./board";
 import { Points } from "./points";
 
 export class Game {
-    turnOrder: Player[];
-    totalPlayers: number;
-    board: Board;
-    points: Points;
-    tiles: Tiles;
-    constructor(public players: Set<Player>) {
+    private readonly board: Board;
+    private readonly tiles: Tiles;
+    readonly turnOrder: Player[];
+    curPlayer: Player;
+    constructor(public players: Player[]) {
         this.turnOrder = this.getTurnOrder();
-        this.totalPlayers = this.players.size;
+        this.curPlayer = this.turnOrder[0];
         this.tiles = new Tiles(this.players);
         this.tiles.initialDraw();
-        this.points = new Points(this.players);
-        this.board = new Board(this.players, this.turnOrder, this.points, this.tiles);
+        this.board = new Board();
+    }
+
+    move(tiles: Tile[], startingCell: string) {
+        const result = this.board.move(tiles, startingCell);
+        if (!result) return;
+        const { squaresUsed, word } = result;
+        this.curPlayer.points += Points.calculatePoints(word, squaresUsed);
+        // FIXEME: exchanging tiles has some additional rules - add another method for this
+        this.tiles.exchangeTiles(this.curPlayer, tiles);
+        this.curPlayer = this.nextPlayer();
     }
 
     // TODO: Actually implement
-    getTurnOrder() {
+    private getTurnOrder() {
         const turnOrder: Player[] = [];
         this.players.forEach((player) => turnOrder.push(player));
         return turnOrder;
+    }
+
+    private nextPlayer() {
+        const curPlayerIdx = this.players.indexOf(this.curPlayer);
+        const nextPlayerIdx = curPlayerIdx === this.players.length ? 0 : curPlayerIdx + 1;
+        return this.players[nextPlayerIdx];
     }
 }
