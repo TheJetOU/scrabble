@@ -24,7 +24,7 @@ Install dependencies:
 $ npm install
 ```
 
-Switch into the `sim`, `server`, and `ui` folder and run the above command on each of them.
+Switch into the `sim`, `server`, and `ui` directories and run the above command on each of them.
 
 Finally, to start the application run:
 

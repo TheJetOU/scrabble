@@ -46,7 +46,7 @@ export const Points = {
         let points = word
             .split("")
             .reduce((prev, cur) => prev + Points.letter(cur), 0);
-        // Word multipliers are applied last move the to the end
+        // Word multipliers are applied last, so move them to the end
         const sorted = squares.sort((a, b) => {
             if (a.type.includes("word") && !b.type.includes("word")) return -1;
             if (b.type.includes("word") && !a.type.includes("word")) return 1;

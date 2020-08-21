@@ -35,10 +35,10 @@ export type Tile = keyof typeof TILES;
 export class Tiles {
     private readonly bag = Object.assign({}, TILES);
 
-    constructor(private readonly players: Player[]) {}
+    constructor(private readonly players: Map<string, Player>) {}
 
     initialDraw() {
-        for (const player of this.players) {
+        for (const player of this.players.values()) {
             player.tiles = this.getTiles(7);
         }
     }
