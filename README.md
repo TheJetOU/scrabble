@@ -8,21 +8,29 @@ The underlying engine is available as an NPM package at: <>
 
 Clone the repo:
 
-`$ git clone https://github.com/TheJetOU/scrabble.git`
+```bash
+$ git clone https://github.com/TheJetOU scrabble.git
+```
 
 Switch into the cloned directory:
 
-`$ cd scrabble`
+```bash
+$ cd scrabble
+```
 
 Install dependencies:
 
-`$ npm install`
+```bash
+$ npm install
+```
 
 Switch into the `sim`, `server`, and `ui` folder and run the above command on each of them.
 
 Finally, to start the application run:
 
-`$ node scrabble`
+```bash
+$ node scrabble
+```
 
 (You can run `./scrabble` in operating systems other than Windows, for addtional
 succinctness.)

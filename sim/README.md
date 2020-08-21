@@ -4,7 +4,9 @@ A zero runtime dependencies Scrabble simulator.
 
 # Installation
 
-`$ npm install scrabble-sim`
+```bash
+$ npm install scrabble-sim
+```
 
 # Usage
 
