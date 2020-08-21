@@ -17,6 +17,7 @@ export class Game {
     }
 
     move(tiles: Tile[], startingCell: string) {
+        // TODO: handle blank tiles
         const result = this.board.move(tiles, startingCell);
         if (!result) return;
         const { squaresUsed, word } = result;
