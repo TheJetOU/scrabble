@@ -47,7 +47,7 @@
         "*": [
             "npm run format"
         ],
-        "*.{.js,.ts}": [
+        "*{.js,.ts}": [
             "npm run lint"
         ]
     }
