@@ -7,7 +7,10 @@ export const Dictionary = {
     },
     read() {
         let data = "";
-        createReadStream("../data/twl.txt").on("data", (chunk) => (data += chunk));
+        createReadStream("../data/twl.txt").on(
+            "data",
+            (chunk) => (data += chunk)
+        );
         this.words = new Set(data.split("\n"));
     },
 };

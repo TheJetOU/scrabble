@@ -331,9 +331,12 @@ export class Square implements ISquare {
     }
 
     adjacentTiles() {
-        const adjacentTiles = [this.up(), this.down(), this.left(), this.right()].filter(
-            (square) => square?.tile,
-        );
+        const adjacentTiles = [
+            this.up(),
+            this.down(),
+            this.left(),
+            this.right(),
+        ].filter((square) => square?.tile);
         return adjacentTiles.length ? adjacentTiles : null;
     }
 

@@ -21,14 +21,23 @@ export class Board {
         }
         const square = this.squares[startingCell];
         if (this.firstMoveOccured && !square.adjacentTiles()?.length) {
-            return Log.error("In turns after one, you must place tiles adjacent to one another.");
+            return Log.error(
+                "In turns after one, you must place tiles adjacent to one another."
+            );
         }
         // Not enough space to add word
         // FIXME: if you're adding tiles between two existing words to form one word, this won't work
         if (
-            square[dir === "forward" ? "down" : "left"](tiles.length, true)?.some((val) => val.tile)
+            square[dir === "forward" ? "down" : "left"](
+                tiles.length,
+                true
+            )?.some((val) => val.tile)
         ) {
-            return Log.error(`There's not enough space to add ${tiles.join("")}to the board.`);
+            return Log.error(
+                `There's not enough space to add ${tiles.join(
+                    ""
+                )} to the board.`
+            );
         }
         let word = "";
         // TODO: Parallel words
@@ -58,10 +67,9 @@ export class Board {
             return Log.error(`Invalid word: ${word}`);
         }
         const squaresUsed: Square[] = [];
-        for (const [idx, nextSquare] of square[dir === "forward" ? "down" : "left"](
-            tiles.length,
-            true,
-        ).entries()) {
+        for (const [idx, nextSquare] of square[
+            dir === "forward" ? "down" : "left"
+        ](tiles.length, true).entries()) {
             this.squares[nextSquare.cell].tile = tiles[idx];
             squaresUsed.push(nextSquare);
         }

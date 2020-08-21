@@ -36,7 +36,8 @@ export class Game {
 
     private nextPlayer() {
         const curPlayerIdx = this.players.indexOf(this.curPlayer);
-        const nextPlayerIdx = curPlayerIdx === this.players.length ? 0 : curPlayerIdx + 1;
+        const nextPlayerIdx =
+            curPlayerIdx === this.players.length ? 0 : curPlayerIdx + 1;
         return this.players[nextPlayerIdx];
     }
 }

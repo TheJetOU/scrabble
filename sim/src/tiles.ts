@@ -66,7 +66,9 @@ export class Tiles {
         const tiles: Tile[] = [];
         for (let i = 0; i < numberOfTiles; i++) {
             const randomNumber = Math.floor(Math.random() * 25);
-            const [tile, left] = (Object.entries(this.bag) as [Tile, number][])[randomNumber];
+            const [tile, left] = (Object.entries(this.bag) as [Tile, number][])[
+                randomNumber
+            ];
             if (left === 0) {
                 i--;
                 continue;

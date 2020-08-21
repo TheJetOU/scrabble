@@ -43,7 +43,9 @@ export const Points = {
      * @param squareType [Square Type -> [letter that hit it]][]
      */
     calculatePoints(word: string, squares: Square[]) {
-        let points = word.split("").reduce((prev, cur) => prev + Points.letter(cur), 0);
+        let points = word
+            .split("")
+            .reduce((prev, cur) => prev + Points.letter(cur), 0);
         // Word multipliers are applied last move the to the end
         const sorted = squares.sort((a, b) => {
             if (a.type.includes("word") && !b.type.includes("word")) return -1;
@@ -67,7 +69,9 @@ export const Points = {
                     points *= 3;
                     break;
                 default:
-                    throw new Error(`Attempted to use non-existent square type: ${type}`);
+                    throw new Error(
+                        `Attempted to use non-existent square type: ${type}`
+                    );
             }
         }
         if (sorted.length === 7) points += 50;
@@ -78,7 +82,9 @@ export const Points = {
         if (tile === " ") tile = "BLANK";
         const points = LETTER_POINTS[tile];
         if (points === undefined) {
-            throw new Error(`Attempted to calculate points for non-existent tile: ${tile}`);
+            throw new Error(
+                `Attempted to calculate points for non-existent tile: ${tile}`
+            );
         }
         return points;
     },
