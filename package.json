@@ -36,5 +36,19 @@
     },
     "subPackages": [
         "sim"
-    ]
+    ],
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged",
+            "post-commit": "git update-index --again"
+        }
+    },
+    "lint-staged": {
+        "*": [
+            "npm run format"
+        ],
+        "*.{.js,.ts}": [
+            "npm run lint"
+        ]
+    }
 }
