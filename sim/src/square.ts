@@ -260,11 +260,10 @@ const SQUARES: Squares = {
 
 export class Square implements ISquare {
     readonly type: SquareType;
-    tile?: Tile;
     private col: string;
     private row: string;
 
-    constructor(public cell: string) {
+    constructor(public cell: string, public tile?: Tile) {
         this.type = SQUARES[this.cell].type;
         this.col = this.cell[0];
         this.row = this.cell.slice(1);
