@@ -28,7 +28,6 @@ export class Game {
         this.curPlayer = this.nextPlayer();
     }
 
-    // TODO: Actually implement
     private getTurnOrder() {
         Log.std(`Deciding turn order...`);
         const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
