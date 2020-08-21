@@ -1,7 +1,7 @@
 {
     "name": "scrabble-sim",
     "version": "0.0.1",
-    "description": "A zero-dependency, minimalist Scrabble simulator",
+    "description": "A zero runtime dependencies Scrabble simulator",
     "main": "dist/index.js",
     "scripts": {
         "prestest": "npm run lint",
