@@ -1,18 +1,18 @@
 import { Player } from "./common";
-import { Tiles, Tile, TILES } from "./tiles";
+import { TILES, Bag, Tile } from "./tiles";
 import { Board } from "./board";
 import { Points } from "./points";
 import { Log } from "./log";
 
 export class Game {
     private readonly board: Board;
-    private readonly tiles: Tiles;
+    private readonly tiles: Bag;
     readonly turnOrder: Map<string, Player>;
     curPlayer: Player;
     constructor(public players: Map<string, Player>) {
         this.turnOrder = this.getTurnOrder();
         this.curPlayer = [...this.turnOrder][0][1];
-        this.tiles = new Tiles(this.players);
+        this.tiles = new Bag(this.players);
         this.tiles.initialDraw();
         this.board = new Board();
     }

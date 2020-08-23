@@ -32,7 +32,7 @@ export const TILES = {
 
 export type Tile = keyof typeof TILES;
 
-export class Tiles {
+export class Bag {
     private readonly bag = Object.assign({}, TILES);
 
     constructor(private readonly players: Map<string, Player>) {}
