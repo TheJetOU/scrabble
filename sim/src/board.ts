@@ -66,7 +66,7 @@ export class Board {
             }
         }
         word += tiles.join("");
-        if (Dictionary.isValidWord(word)) {
+        if (!Dictionary.isValidWord(word)) {
             return Log.error(`Invalid word: ${word}`);
         }
         const squaresUsed: Square[] = [];
