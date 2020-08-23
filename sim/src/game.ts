@@ -23,7 +23,7 @@ export class Game {
         if (!result) return;
         const { squaresUsed, word } = result;
         this.curPlayer.points += Points.calculatePoints(word, squaresUsed);
-        this.tiles.giveTiles(this.curPlayer, this.curPlayer.tiles.length);
+        this.tiles.giveTiles(this.curPlayer, tiles.length);
         this.curPlayer = this.nextPlayer();
     }
 
