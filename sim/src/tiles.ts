@@ -39,7 +39,7 @@ export class Tiles {
 
     initialDraw() {
         for (const player of this.players.values()) {
-            player.tiles = this.getTiles(7);
+            this.giveTiles(player, 7);
         }
     }
 
@@ -54,17 +54,15 @@ export class Tiles {
         if (tileCharacters.length < 6) {
             Log.error("Cannot exchange tiles if six or fewer tiles remain");
         }
-        for (const [idx, tile] of tiles.entries()) {
-            const newTile = this.getTiles(1);
-            player.tiles.splice(idx, 1);
-            player.tiles.push(newTile[0]);
+        for (const tile of tiles) {
+            this.giveTiles(player, 1);
             this.bag[tile] += 1;
         }
     }
 
-    getTiles(numberOfTiles: number) {
+    giveTiles(player: Player, n: number) {
         const tiles: Tile[] = [];
-        for (let i = 0; i < numberOfTiles; i++) {
+        for (let i = 0; i < n; i++) {
             const randomNumber = Math.floor(Math.random() * 25);
             const [tile, left] = (Object.entries(this.bag) as [Tile, number][])[
                 randomNumber
@@ -74,6 +72,7 @@ export class Tiles {
                 continue;
             }
             this.bag[tile] -= 1;
+            player.tiles.push(tile);
             tiles.push(tile);
         }
         return tiles;

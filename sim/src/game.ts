@@ -23,8 +23,7 @@ export class Game {
         if (!result) return;
         const { squaresUsed, word } = result;
         this.curPlayer.points += Points.calculatePoints(word, squaresUsed);
-        // FIXEME: exchanging tiles has some additional rules - add another method for this
-        this.tiles.exchangeTiles(this.curPlayer, tiles);
+        this.tiles.giveTiles(this.curPlayer, this.curPlayer.tiles.length);
         this.curPlayer = this.nextPlayer();
     }
 
