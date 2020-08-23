@@ -256,7 +256,7 @@ const SQUARES: Squares = {
     O13: { type: "regular" },
     O14: { type: "regular" },
     O15: { type: "triplewordscore" },
-};
+} as const;
 
 export class Square implements ISquare {
     readonly type: SquareType;

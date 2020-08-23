@@ -36,7 +36,7 @@ const LETTER_POINTS: { [letter: string]: number } = {
 
     Q: 10,
     Z: 10,
-};
+} as const;
 
 export const Points = {
     /**

@@ -28,12 +28,12 @@ export const TILES = {
     X: 1,
     Y: 2,
     Z: 1,
-};
+} as const;
 
 export type Tile = keyof typeof TILES;
 
 export class Bag {
-    private readonly bag = Object.assign({}, TILES);
+    private readonly bag: { [tile in Tile]: number } = Object.assign({}, TILES);
 
     constructor(private readonly players: Map<string, Player>) {}
 
