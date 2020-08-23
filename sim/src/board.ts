@@ -20,7 +20,10 @@ export class Board {
             dir = "sideways";
         }
         const square = this.squares[startingCell];
-        if (this.firstMoveOccured && !square.adjacentTiles()?.length) {
+        if (
+            this.firstMoveOccured &&
+            !square.adjacent()?.filter((square) => square.tile).length
+        ) {
             return Log.error(
                 "In turns after one, you must place tiles adjacent to one another."
             );

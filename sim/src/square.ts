@@ -329,14 +329,14 @@ export class Square implements ISquare {
         return all ? squares : squares[squares.length - 1];
     }
 
-    adjacentTiles() {
-        const adjacentTiles = [
-            this.up(),
-            this.down(),
-            this.left(),
-            this.right(),
-        ].filter((square) => square?.tile);
-        return adjacentTiles.length ? adjacentTiles : null;
+    adjacent(n = 1) {
+        const adjacentSquares = [
+            this.up(n),
+            this.down(n),
+            this.left(n),
+            this.right(n),
+        ];
+        return adjacentSquares.length ? adjacentSquares : null;
     }
 
     static all() {
