@@ -27,6 +27,15 @@ export class Game {
         this.curPlayer = this.nextPlayer();
     }
 
+    skip() {
+        this.curPlayer = this.nextPlayer();
+    }
+
+    exchangeTiles(tiles: Tile[]) {
+        this.tiles.exchangeTiles(this.curPlayer, tiles);
+        this.curPlayer = this.nextPlayer();
+    }
+
     private getTurnOrder() {
         Log.std(`Deciding turn order...`);
         const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
