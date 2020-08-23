@@ -23,7 +23,14 @@ export class Game {
         if (!result) return;
         const { squaresUsed, word } = result;
         this.curPlayer.points += Points.calculatePoints(word, squaresUsed);
-        this.tiles.giveTiles(this.curPlayer, tiles.length);
+        const newTiles = this.tiles.giveTiles(
+            this.curPlayer,
+            this.curPlayer.tiles.length
+        );
+        if (!newTiles.length && this.curPlayer.tiles.length === tiles.length) {
+            this.win(this.curPlayer);
+        }
+        this.tiles.giveTiles(this.curPlayer, newTiles.length);
         this.curPlayer = this.nextPlayer();
     }
 
@@ -34,6 +41,19 @@ export class Game {
     exchangeTiles(tiles: Tile[]) {
         this.tiles.exchangeTiles(this.curPlayer, tiles);
         this.curPlayer = this.nextPlayer();
+    }
+
+    private win(player: Player) {
+        for (const [, otherPlayer] of [...this.players].filter(
+            (player) => player[1].name !== player[1].name
+        )) {
+            const points = otherPlayer.tiles.reduce(
+                (prev, cur) => prev + Points.letter(cur),
+                0
+            );
+            player.points += points;
+            otherPlayer.points -= points;
+        }
     }
 
     private getTurnOrder() {
