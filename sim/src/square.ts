@@ -12,6 +12,7 @@ export type SquareType =
 export interface ISquare {
     type: SquareType;
     tile?: Tile;
+    modifierUsed?: boolean;
 }
 
 type Squares = { [cell: string]: ISquare };
@@ -260,6 +261,7 @@ const SQUARES: Squares = {
 
 export class Square implements ISquare {
     readonly type: SquareType;
+    modifierUsed = false;
     private col: string;
     private row: string;
 

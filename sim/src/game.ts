@@ -8,13 +8,14 @@ export class Game {
     private readonly board: Board;
     private readonly tiles: Bag;
     readonly turnOrder: Map<string, Player>;
+    readonly log: Log = new Log();
     curPlayer: Player;
     constructor(public players: Map<string, Player>) {
         this.turnOrder = this.getTurnOrder();
         this.curPlayer = [...this.turnOrder][0][1];
-        this.tiles = new Bag(this.players);
+        this.tiles = new Bag(this.players, this.log);
         this.tiles.initialDraw();
-        this.board = new Board();
+        this.board = new Board(this.log);
     }
 
     move(tiles: Tile[], startingCell: string) {
@@ -57,21 +58,21 @@ export class Game {
     }
 
     private getTurnOrder() {
-        Log.std(`Deciding turn order...`);
+        this.log.std(`Deciding turn order...`);
         const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
         const turnOrder: { [playername: string]: number } = {};
         for (const player of this.players.values()) {
             const randomTile = (Object.keys(TILES) as Tile[])[
                 Math.floor(Math.random() * 25)
             ];
-            Log.std(`${player.name} randomly picked ${randomTile}`);
+            this.log.std(`${player.name} randomly picked ${randomTile}`);
             turnOrder[player.name] =
                 randomTile === "BLANK" ? 0 : alphabet.indexOf(randomTile) + 1;
         }
         const sortedTurnOrder = Object.entries(turnOrder).sort(
             (a, b) => a[1] - b[1]
         );
-        Log.important(`Turn order: ${sortedTurnOrder.join(" -> ")}`);
+        this.log.important(`Turn order: ${sortedTurnOrder.join(" -> ")}`);
         return new Map(
             Object.keys(sortedTurnOrder).map((playername) => [
                 playername,

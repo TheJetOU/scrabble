@@ -13,10 +13,14 @@ $ npm install scrabble-sim
 To start a game:
 
 ```typescript
-import { Game, logStream } from "scrabble-sim";
+import { Game } from "scrabble-sim";
 
 // 2-4 players needed
-const PLAYERS = [{ name: "a" }, { name: "b" }, { name: "c" }];
+const PLAYERS = new Map([
+    ["a", { name: "a" }],
+    ["b", { name: "b" }],
+    ["c", { name: "c" }],
+]);
 
 const game = new Game(PLAYERS);
 ```
@@ -26,7 +30,7 @@ const game = new Game(PLAYERS);
 To read the outputted game log:
 
 ```typescript
-logStream.on("data", (msg) => {
+game.log.on("data", (msg) => {
     console.log(msg);
 });
 ```

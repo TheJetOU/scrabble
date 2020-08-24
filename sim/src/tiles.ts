@@ -35,7 +35,10 @@ export type Tile = keyof typeof TILES;
 export class Bag {
     private readonly bag: { [tile in Tile]: number } = Object.assign({}, TILES);
 
-    constructor(private readonly players: Map<string, Player>) {}
+    constructor(
+        private readonly players: Map<string, Player>,
+        private readonly log: Log
+    ) {}
 
     initialDraw() {
         for (const player of this.players.values()) {
@@ -45,14 +48,18 @@ export class Bag {
 
     exchangeTiles(player: Player, tiles: Tile[]) {
         if (tiles.length > 7 && tiles.length < 1) {
-            Log.error("Can only exchange one to seven tiles");
+            this.log.error("Can only exchange one to seven tiles");
         }
         const tileCharacters = Object.keys(TILES) as Tile[];
         if (tiles.length > tileCharacters.length) {
-            Log.error("Trying to take more tiles than available in the bag");
+            this.log.error(
+                "Trying to take more tiles than available in the bag"
+            );
         }
         if (tileCharacters.length < 6) {
-            Log.error("Cannot exchange tiles if six or fewer tiles remain");
+            this.log.error(
+                "Cannot exchange tiles if six or fewer tiles remain"
+            );
         }
         for (const tile of tiles) {
             this.giveTiles(player, 1);

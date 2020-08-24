@@ -6,6 +6,8 @@ import { Dictionary } from "./dictionary";
 export class Board {
     private readonly squares = Square.all();
     private firstMoveOccured = false;
+
+    constructor(private readonly log: Log) {}
     /**
      *
      * @param startingCell
@@ -24,7 +26,7 @@ export class Board {
             this.firstMoveOccured &&
             !square.adjacent()?.filter((square) => square.tile).length
         ) {
-            return Log.error(
+            return this.log.error(
                 "In turns after one, you must place tiles adjacent to one another."
             );
         }
@@ -36,7 +38,7 @@ export class Board {
                 true
             )?.some((val) => val.tile)
         ) {
-            return Log.error(
+            return this.log.error(
                 `There's not enough space to add ${tiles.join(
                     ""
                 )} to the board.`
@@ -67,12 +69,15 @@ export class Board {
         }
         word += tiles.join("");
         if (!Dictionary.isValidWord(word)) {
-            return Log.error(`Invalid word: ${word}`);
+            return this.log.error(`Invalid word: ${word}`);
         }
         const squaresUsed: Square[] = [];
         for (const [idx, nextSquare] of square[
             dir === "forward" ? "down" : "left"
         ](tiles.length, true).entries()) {
+            if (nextSquare.type !== "regular") {
+                nextSquare.modifierUsed = true;
+            }
             this.squares[nextSquare.cell].tile = tiles[idx];
             squaresUsed.push(nextSquare);
         }

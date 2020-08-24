@@ -1,21 +1,18 @@
 import { Readable } from "stream";
 
-const readable = new Readable({
-    read() {
-        return;
-    },
-});
-
-export const Log = {
+export class Log {
+    readonly readable = new Readable({
+        read() {
+            return;
+        },
+    });
     std(msg: string) {
-        readable.push(msg);
-    },
+        this.readable.push(msg);
+    }
     important(msg: string) {
-        readable.push(`[Important] ${msg}`);
-    },
+        this.readable.push(`[Important] ${msg}`);
+    }
     error(msg: string) {
-        readable.push(`[Error] ${msg}`);
-    },
-};
-
-export const readStream = readable;
+        this.readable.push(`[Error] ${msg}`);
+    }
+}

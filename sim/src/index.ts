@@ -9,4 +9,3 @@
  */
 
 export { Game } from "./game";
-export { readStream } from "./log";
