@@ -1,4 +1,4 @@
-import { Player } from "./common";
+import { Player } from "./player";
 import { Log } from "./log";
 
 export const TILES = {

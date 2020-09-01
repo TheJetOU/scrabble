@@ -1,9 +1,9 @@
-import { Player } from "./common";
 import { TILES, Bag, Tile } from "./tiles";
 import { Board } from "./board";
 import { Points } from "./points";
 import { Log } from "./log";
 import { Dictionary } from "./dictionary";
+import { Player, createPlayer } from "./player";
 
 export class Game {
     private readonly board: Board;
@@ -14,11 +14,7 @@ export class Game {
     curPlayer: Player;
     constructor(playerNames: string[]) {
         for (const playerName of playerNames) {
-            this.players.set(playerName, {
-                name: playerName,
-                points: 0,
-                tiles: [],
-            });
+            this.players.set(playerName, createPlayer(playerName));
         }
         this.turnOrder = this.getTurnOrder();
         this.curPlayer = [...this.turnOrder][0][1];

@@ -5,3 +5,7 @@ export interface Player {
     points: number;
     tiles: Tile[];
 }
+
+export function createPlayer(name: string): Player {
+    return { name, points: 0, tiles: [] };
+}
