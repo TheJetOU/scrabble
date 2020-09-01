@@ -3,11 +3,6 @@
     "version": "0.0.1",
     "description": "A zero runtime dependencies Scrabble simulator",
     "main": "dist/index.js",
-    "scripts": {
-        "test": "jest",
-        "format": "prettier --config .prettierrc . --write",
-        "lint": "eslint 'src/**/*.ts'"
-    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/TheJetOU/scrabble.git"

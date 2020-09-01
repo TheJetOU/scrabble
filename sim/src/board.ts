@@ -8,13 +8,7 @@ export class Board {
     private firstMoveOccured = false;
 
     constructor(private readonly log: Log) {}
-    /**
-     *
-     * @param startingCell
-     *  The cell you want to add the first tile in.
-     *  If the main word reads left-to-right, the row number precedes the column letter,
-     *  and if the main word reads top-to-bottom
-     */
+
     move(tiles: Tile[], startingCell: string) {
         let dir: "forward" | "sideways" = "forward";
         if (parseInt(startingCell[0])) {
@@ -24,7 +18,7 @@ export class Board {
         const square = this.squares[startingCell];
         if (
             this.firstMoveOccured &&
-            !square.adjacent()?.filter((square) => square.tile).length
+            !Object.values(square.adjacent(1, { squares: this.squares })).length
         ) {
             return this.log.error(
                 "In turns after one, you must place tiles adjacent to one another."
@@ -33,10 +27,10 @@ export class Board {
         // Not enough space to add word
         // FIXME: if you're adding tiles between two existing words to form one word, this won't work
         if (
-            square[dir === "forward" ? "down" : "left"](
-                tiles.length,
-                true
-            )?.some((val) => val.tile)
+            square[dir === "forward" ? "down" : "left"](tiles.length, {
+                all: true,
+                squares: this.squares,
+            })?.some((val) => val.tile)
         ) {
             return this.log.error(
                 `There's not enough space to add ${tiles.join(
@@ -47,24 +41,30 @@ export class Board {
         let word = "";
         // TODO: Parallel words
         if (dir === "sideways") {
-            let [leftCell, rightCell] = [square.left(), square.right()];
+            let [leftCell, rightCell] = [
+                square.left(1, { squares: this.squares }),
+                square.right(1, { squares: this.squares }),
+            ];
             while (leftCell?.tile) {
                 word += leftCell.tile;
-                leftCell = leftCell.left();
+                leftCell = leftCell.left(1, { squares: this.squares });
             }
             while (rightCell?.tile) {
                 word += rightCell.tile;
-                rightCell = rightCell.right();
+                rightCell = rightCell.right(1, { squares: this.squares });
             }
         } else if (dir === "forward") {
-            let [downCell, upCell] = [square.down(), square.up()];
+            let [upCell, downCell] = [
+                square.up(1, { squares: this.squares }),
+                square.down(1, { squares: this.squares }),
+            ];
             while (downCell?.tile) {
                 word += downCell.tile;
-                downCell = square.down();
+                downCell = downCell.down(1, { squares: this.squares });
             }
             while (upCell?.tile) {
                 word += upCell.tile;
-                upCell = square.up();
+                upCell = upCell.up(1, { squares: this.squares });
             }
         }
         word += tiles.join("");
@@ -72,11 +72,18 @@ export class Board {
             return this.log.error(`Invalid word: ${word}`);
         }
         const squaresUsed: Square[] = [];
-        for (const [idx, nextSquare] of square[
-            dir === "forward" ? "down" : "left"
-        ](tiles.length, true).entries()) {
-            if (nextSquare.type !== "regular") {
-                nextSquare.modifierUsed = true;
+        for (const [idx, nextSquare] of [square]
+            .concat(
+                square[dir === "forward" ? "down" : "left"](tiles.length - 1, {
+                    squares: this.squares,
+                    all: true,
+                })
+            )
+            .entries()) {
+            if (this.squares[nextSquare.cell].tile) {
+                return this.log.error(
+                    `Cannot place tile on cell ${nextSquare.cell} which already has a tile`
+                );
             }
             this.squares[nextSquare.cell].tile = tiles[idx];
             squaresUsed.push(nextSquare);

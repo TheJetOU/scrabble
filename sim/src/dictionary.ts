@@ -1,4 +1,4 @@
-import { createReadStream } from "fs";
+import * as fs from "fs";
 
 export const Dictionary = {
     words: new Set<string>(),
@@ -6,11 +6,20 @@ export const Dictionary = {
         return this.words.has(word.toLowerCase());
     },
     read() {
+        if (this.words.size) return;
+        const stream = fs.createReadStream(`../data/twl.txt`);
         let data = "";
-        createReadStream("../data/twl.txt").on(
-            "data",
-            (chunk) => (data += chunk)
-        );
-        this.words = new Set(data.split("\n"));
+        return new Promise((resolve, reject) => {
+            stream.on("error", (err) => {
+                reject(err);
+            });
+            stream.on("data", (chunk) => {
+                data += chunk;
+            });
+            stream.on("end", () => {
+                this.words = new Set(data.split("\n"));
+                resolve();
+            });
+        });
     },
 };

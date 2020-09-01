@@ -12,12 +12,11 @@ export type SquareType =
 export interface ISquare {
     type: SquareType;
     tile?: Tile;
-    modifierUsed?: boolean;
 }
 
-type Squares = { [cell: string]: ISquare };
+type Squares = { [cell: string]: Square };
 
-const SQUARES: Squares = {
+const SQUARES: { [cell: string]: ISquare } = {
     A1: { type: "triplewordscore" },
     A2: { type: "regular" },
     A3: { type: "regular" },
@@ -271,74 +270,141 @@ export class Square implements ISquare {
         this.row = this.cell.slice(1);
     }
 
-    up(n?: number, all?: false): Square;
-    up(n?: number, all?: true): Square[];
-    up(n = 1, all = false) {
-        const squares: Square[] = [];
+    up(n: number, options: { all?: false; squares?: Squares }): Square;
+    up(n: number, options: { all?: true; squares?: Squares }): Square[];
+    // Absolutely no fucking idea why this overload is necessary for `Square#adjacent` to work
+    up(
+        n: number,
+        options: { all?: boolean; squares?: Squares }
+    ): Square[] | Square;
+    up(n = 1, options: { all?: boolean; squares?: Squares } = { all: false }) {
+        if (options.all === undefined) {
+            options.all = false;
+        }
+        const upwardSquares: Square[] = [];
         for (let i = 1; i < n + 1; i++) {
             const upwardRow = parseInt(this.row) - i;
-            if (upwardRow > 15) {
+            if (upwardRow < 1) {
                 break;
             }
             const cell: string = this.col + upwardRow.toString();
-            squares.push(new Square(cell));
+            if (options.squares?.[cell]) {
+                upwardSquares.push(options.squares[cell]);
+            } else {
+                upwardSquares.push(new Square(cell));
+            }
         }
-        return all ? squares : squares[squares.length - 1];
+        return options.all
+            ? upwardSquares
+            : upwardSquares[upwardSquares.length - 1];
     }
 
-    left(n?: number, all?: false): Square;
-    left(n?: number, all?: true): Square[];
-    left(n = 1, all = false) {
-        const squares: Square[] = [];
+    left(n?: number, options?: { all?: false; squares?: Squares }): Square;
+    left(n?: number, options?: { all?: true; squares?: Squares }): Square[];
+    left(
+        n: number,
+        options: { all?: boolean; squares?: Squares }
+    ): Square[] | Square;
+    left(
+        n = 1,
+        options: { all?: boolean; squares?: Squares } = { all: false }
+    ) {
+        if (options.all === undefined) {
+            options.all = false;
+        }
+        const leftSquares: Square[] = [];
         for (let i = 1; i < n + 1; i++) {
-            const leftCol = ALPHABET.indexOf(this.col) + 1 - i;
-            if (leftCol > 15) {
+            const leftCol = ALPHABET.indexOf(this.col) - i + 1;
+            if (leftCol < 1) {
                 break;
             }
-            const cell = ALPHABET[leftCol] + this.row;
-            squares.push(new Square(cell));
+            const cell = ALPHABET[leftCol - 1] + this.row;
+            if (options.squares?.[cell]) {
+                leftSquares.push(options.squares[cell]);
+            } else {
+                leftSquares.push(new Square(cell));
+            }
         }
-        return all ? squares : squares[squares.length - 1];
+        return options.all ? leftSquares : leftSquares[leftSquares.length - 1];
     }
 
-    right(n?: number, all?: false): Square;
-    right(n?: number, all?: true): Square[];
-    right(n = 1, all = false) {
-        const squares: Square[] = [];
+    right(n?: number, options?: { all?: false; squares?: Squares }): Square;
+    right(n?: number, options?: { all?: true; squares?: Squares }): Square[];
+    right(
+        n: number,
+        options: { all?: boolean; squares?: Squares }
+    ): Square[] | Square;
+    right(
+        n = 1,
+        options: { all?: boolean; squares?: Squares } = { all: false }
+    ) {
+        const rightSquares: Square[] = [];
         for (let i = 1; i < n + 1; i++) {
-            const rightCol = ALPHABET.indexOf(this.col) + 1 + i;
+            const rightCol = ALPHABET.indexOf(this.col) + i + 1;
             if (rightCol > 15) {
                 break;
             }
-            const cell = ALPHABET[rightCol] + this.row;
-            squares.push(new Square(cell));
+            const cell = ALPHABET[rightCol + 1] + this.row;
+            if (options.squares?.[cell]) {
+                rightSquares.push(options.squares[cell]);
+            } else {
+                rightSquares.push(new Square(cell));
+            }
         }
-        return all ? squares : squares[squares.length - 1];
+        return options.all
+            ? rightSquares
+            : rightSquares[rightSquares.length - 1];
     }
 
-    down(n?: number, all?: false): Square;
-    down(n?: number, all?: true): Square[];
-    down(n = 1, all = false) {
-        const squares: Square[] = [];
+    down(n?: number, options?: { all?: false; squares?: Squares }): Square;
+    down(n?: number, options?: { all?: true; squares?: Squares }): Square[];
+    down(
+        n: number,
+        options: { all?: boolean; squares?: Squares }
+    ): Square[] | Square;
+    down(
+        n = 1,
+        options: { all?: boolean; squares?: Squares } = { all: false }
+    ) {
+        if (options.all === undefined) {
+            options.all = false;
+        }
+        const downwardSquares: Square[] = [];
         for (let i = 1; i < n + 1; i++) {
             const downwardRow = parseInt(this.row) + i;
             if (downwardRow > 15) {
                 break;
             }
             const cell: string = this.col + downwardRow.toString();
-            squares.push(new Square(cell));
+            if (options.squares?.[cell]) {
+                downwardSquares.push(options.squares[cell]);
+            } else {
+                downwardSquares.push(new Square(cell));
+            }
         }
-        return all ? squares : squares[squares.length - 1];
+        return options.all
+            ? downwardSquares
+            : downwardSquares[downwardSquares.length - 1];
     }
 
-    adjacent(n = 1) {
-        const adjacentSquares = [
-            this.up(n),
-            this.down(n),
-            this.left(n),
-            this.right(n),
-        ];
-        return adjacentSquares.length ? adjacentSquares : null;
+    adjacent(
+        n?: number,
+        options?: { all?: false; squares?: Squares }
+    ): { up: Square; down: Square; left: Square; right: Square };
+    adjacent(
+        n?: number,
+        options?: { all?: true; squares?: Squares }
+    ): { up: Square[]; down: Square[]; left: Square[]; right: Square[] };
+    adjacent(
+        n = 1,
+        options: { all?: boolean; squares?: Squares } = { all: false }
+    ) {
+        return {
+            up: this.up(n, options),
+            down: this.down(n, options),
+            left: this.left(n, options),
+            right: this.right(n, options),
+        };
     }
 
     static all() {

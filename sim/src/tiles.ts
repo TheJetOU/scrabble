@@ -42,7 +42,7 @@ export class Bag {
 
     initialDraw() {
         for (const player of this.players.values()) {
-            this.giveTiles(player, 7);
+            this.giveRandomTiles(player, 7);
         }
     }
 
@@ -50,24 +50,30 @@ export class Bag {
         if (tiles.length > 7 && tiles.length < 1) {
             this.log.error("Can only exchange one to seven tiles");
         }
-        const tileCharacters = Object.keys(TILES) as Tile[];
-        if (tiles.length > tileCharacters.length) {
+        const tilesLeft = Object.values(this.bag).reduce(
+            (prev, cur) => prev + cur,
+            0
+        );
+        if (tiles.length > tilesLeft) {
             this.log.error(
                 "Trying to take more tiles than available in the bag"
             );
         }
-        if (tileCharacters.length < 6) {
+        if (tilesLeft < 6) {
             this.log.error(
                 "Cannot exchange tiles if six or fewer tiles remain"
             );
         }
+        this.log.important(
+            `${player.name} is exchanging ${tiles.length} tiles`
+        );
+        this.giveRandomTiles(player, tiles.length);
         for (const tile of tiles) {
-            this.giveTiles(player, 1);
-            this.bag[tile] += 1;
+            this.bag[tile] -= 1;
         }
     }
 
-    giveTiles(player: Player, n: number) {
+    giveRandomTiles(player: Player, n: number) {
         const tiles: Tile[] = [];
         for (let i = 0; i < n; i++) {
             const randomNumber = Math.floor(Math.random() * 25);
@@ -82,6 +88,7 @@ export class Bag {
             player.tiles.push(tile);
             tiles.push(tile);
         }
+        this.log.important(`${player.name} received ${tiles.join(", ")} tiles`);
         return tiles;
     }
 }

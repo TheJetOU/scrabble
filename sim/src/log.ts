@@ -1,18 +1,20 @@
 import { Readable } from "stream";
 
-export class Log {
-    readonly readable = new Readable({
-        read() {
-            return;
-        },
-    });
+export class Log extends Readable {
+    private readonly logs: string[] = [];
     std(msg: string) {
-        this.readable.push(msg);
+        this.logs.push(msg);
     }
     important(msg: string) {
-        this.readable.push(`[Important] ${msg}`);
+        this.logs.push(`[Important] ${msg}`);
     }
     error(msg: string) {
-        this.readable.push(`[Error] ${msg}`);
+        this.logs.push(`[Error] ${msg}`);
+    }
+    _read() {
+        for (const log of this.logs) {
+            super.push(log);
+        }
+        this.logs.length = 0;
     }
 }
