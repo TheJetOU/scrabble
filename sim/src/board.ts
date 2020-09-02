@@ -2,6 +2,7 @@ import { Tile } from "./tiles";
 import { Square } from "./square";
 import { Log } from "./log";
 import { Dictionary } from "./dictionary";
+import { Player } from "./player";
 
 export class Board {
     private readonly squares = Square.all();
@@ -9,7 +10,7 @@ export class Board {
 
     constructor(private readonly log: Log) {}
 
-    move(tiles: Tile[], startingCell: string) {
+    move(player: Player, tiles: Tile[], startingCell: string) {
         let dir: "forward" | "sideways" = "forward";
         if (parseInt(startingCell[0])) {
             startingCell = startingCell.slice(1) + startingCell[0];
@@ -20,7 +21,7 @@ export class Board {
             this.firstMoveOccured &&
             !Object.values(square.adjacent(1, { squares: this.squares })).length
         ) {
-            return this.log.error(
+            return player.log.error(
                 "In turns after one, you must place tiles adjacent to one another."
             );
         }
@@ -32,7 +33,7 @@ export class Board {
                 squares: this.squares,
             })?.some((val) => val.tile)
         ) {
-            return this.log.error(
+            return player.log.error(
                 `There's not enough space to add ${tiles.join(
                     ""
                 )} to the board.`
@@ -69,7 +70,9 @@ export class Board {
         }
         word += tiles.join("");
         if (!Dictionary.isValidWord(word)) {
-            return this.log.error(`Invalid word: ${word}`);
+            return this.log.error(
+                `${player.name} attempted to use invalid word: ${word}`
+            );
         }
         const squaresUsed: Square[] = [];
         for (const [idx, nextSquare] of [square]
@@ -81,7 +84,7 @@ export class Board {
             )
             .entries()) {
             if (this.squares[nextSquare.cell].tile) {
-                return this.log.error(
+                return player.log.error(
                     `Cannot place tile on cell ${nextSquare.cell} which already has a tile`
                 );
             }

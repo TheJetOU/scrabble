@@ -1,6 +1,6 @@
 # Introduction
 
-This is the source code for a Scrabble implementiation using the TWL dictionary.
+This repository contains a multiplayer Scrabble implementiation.
 
 The underlying engine is available as an NPM package at: <>
 
@@ -9,7 +9,7 @@ The underlying engine is available as an NPM package at: <>
 Clone the repo:
 
 ```bash
-$ git clone https://github.com/TheJetOU scrabble.git
+$ git clone https://github.com/TheJetOU/scrabble.git
 ```
 
 Switch into the cloned directory:
@@ -32,8 +32,7 @@ Finally, to start the application run:
 $ node scrabble
 ```
 
-(You can run `./scrabble` in operating systems other than Windows, for addtional
-succinctness.)
+(You can run `./scrabble` instead in operating systems other than Windows, for addtional succinctness.)
 
 # License
 

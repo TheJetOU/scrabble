@@ -38,11 +38,11 @@ export class Game {
     move(tiles: Tile[], startingCell: string) {
         // TODO: handle blank tiles
         if (!tiles.every((tile) => this.curPlayer.tiles.includes(tile))) {
-            return this.log.error(
-                `Attempted to use tiles the player doesn't have`
+            return this.curPlayer.log.error(
+                `You attmped to use tiles you don't have`
             );
         }
-        const result = this.board.move(tiles, startingCell);
+        const result = this.board.move(this.curPlayer, tiles, startingCell);
         if (!result) return;
         const { squaresUsed, word } = result;
         const points = Points.calculatePoints(word, squaresUsed);
@@ -60,9 +60,13 @@ export class Game {
             return this.win(this.curPlayer);
         }
         this.curPlayer = this.nextPlayer();
-        const possessive = (name: string) =>
-            name.endsWith("s") ? `${name}'` : `${name}'s`;
-        this.log.important(`${possessive(this.curPlayer.name)} turn to play`);
+        this.log.important(
+            `${
+                this.curPlayer.name.endsWith("s")
+                    ? `${this.curPlayer.name}'`
+                    : `${this.curPlayer.name}'s`
+            } turn to play`
+        );
     }
 
     skip() {

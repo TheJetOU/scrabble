@@ -31,7 +31,13 @@ To read the outputted game log:
 
 ```typescript
 game.log.on("data", (msg) => {
-    console.log(msg);
+    console.log(`GAME MSG: ${msg}`);
+});
+
+game.players.forEach("data", (player) => {
+    player.log.on("data", (msg) => {
+        console.log(`${player.name.toUpperCase()} MSG: ${msg}`);
+    });
 });
 ```
 
