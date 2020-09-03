@@ -1,0 +1,21 @@
+#!/bin/bash
+
+DIRS=("sim" "test")
+
+if [ "$#" -eq  "0" ] || [ "$1" == "all" ]; then
+    for dir in "${DIRS[@]}"; do
+        command="./node_modules/.bin/tsc --incremental false --noEmit --pretty -p ./$dir"
+        printf "> ${command}\n\n"
+        output=`$command`
+        printf "$output\n\n"
+    done
+    exit
+fi
+
+if [ "$1" == "sim" ] || [ "$1" == "test" ]; then
+    command="./node_modules/.bin/tsc --incremental false --noEmit --pretty -p ./$1"
+    printf "> ${command}\n\n"
+    output=`$command`
+    printf "$output\n"
+else printf "Unexpected dir: $1\n"
+fi
