@@ -8,7 +8,7 @@
         "transpile": "./scripts/transpile",
         "typecheck": "./scripts/typecheck",
         "format": "prettier --write .",
-        "lint": "eslint '**/**.ts"
+        "lint": "eslint **/**.ts"
     },
     "repository": {
         "type": "git",

@@ -1,5 +1,5 @@
-import { Points } from "../points";
-import { Square } from "../square";
+import { Points } from "../../sim/src/points";
+import { Square } from "../../sim/src/square";
 
 describe("Points", () => {
     describe("#calculatePoints", () => {

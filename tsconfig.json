@@ -11,5 +11,5 @@
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true
     },
-    "include": ["sim"]
+    "include": ["test", "sim"]
 }
