@@ -314,7 +314,7 @@ export class Square implements ISquare {
         }
         const leftSquares: Square[] = [];
         for (let i = 1; i < n + 1; i++) {
-            const leftCol = ALPHABET.indexOf(this.col) - i + 1;
+            const leftCol = ALPHABET.indexOf(this.col) + 1 - i;
             if (leftCol < 1) {
                 break;
             }
@@ -340,11 +340,11 @@ export class Square implements ISquare {
     ) {
         const rightSquares: Square[] = [];
         for (let i = 1; i < n + 1; i++) {
-            const rightCol = ALPHABET.indexOf(this.col) + i + 1;
+            const rightCol = ALPHABET.indexOf(this.col) + i;
             if (rightCol > 15) {
                 break;
             }
-            const cell = ALPHABET[rightCol + 1] + this.row;
+            const cell = ALPHABET[rightCol] + this.row;
             if (options.squares?.[cell]) {
                 rightSquares.push(options.squares[cell]);
             } else {
