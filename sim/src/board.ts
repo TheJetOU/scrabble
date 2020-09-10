@@ -1,11 +1,12 @@
 import { Tile } from "./tiles";
-import { Square } from "./square";
+import { Square, SquareType } from "./square";
 import { Log } from "./log";
 import { Dictionary } from "./dictionary";
 import { Player } from "./player";
 
 export class Board {
     private readonly squares = Square.all();
+    private readonly modifiersUsed = new Set<SquareType>();
     private firstMoveOccured = false;
 
     constructor(private readonly log: Log) {}
@@ -89,6 +90,13 @@ export class Board {
                 );
             }
             this.squares[nextSquare.cell].tile = tiles[idx];
+            if (nextSquare.type !== "regular") {
+                this.log.std(`Modifier ${nextSquare.type} used!`);
+                this.modifiersUsed.add(nextSquare.type);
+            }
+            if (this.modifiersUsed.has(nextSquare.type)) {
+                nextSquare.modifierUsed = true;
+            }
             squaresUsed.push(nextSquare);
         }
         if (!this.firstMoveOccured) this.firstMoveOccured = true;

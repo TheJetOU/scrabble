@@ -47,20 +47,21 @@ export const Points = {
             .split("")
             .reduce((prev, cur) => prev + Points.letter(cur), 0);
         // Word multipliers are applied last, so move them to the end
-        const sorted = squares.sort((a, b) => {
+        const sortedSquares = squares.sort((a, b) => {
             if (!a.type.includes("word") && b.type.includes("word")) return -1;
             if (!b.type.includes("word") && a.type.includes("word")) return 1;
             return 0;
         });
-        for (const { type, tile } of sorted) {
-            switch (type) {
+        for (const square of sortedSquares) {
+            if (square.modifierUsed) continue;
+            switch (square.type) {
                 case "regular":
                     break;
                 case "doubleletterscore":
-                    points += Points.letter(tile!);
+                    points += Points.letter(square.tile!);
                     break;
                 case "tripleletterscore":
-                    points += Points.letter(tile!) * 2;
+                    points += Points.letter(square.tile!) * 2;
                     break;
                 case "doublewordscore":
                     points *= 2;
@@ -70,11 +71,11 @@ export const Points = {
                     break;
                 default:
                     throw new Error(
-                        `Attempted to use non-existent square type: ${type}`
+                        `Attempted to use non-existent square type: ${square.type}`
                     );
             }
         }
-        if (sorted.length === 7) points += 50;
+        if (sortedSquares.length === 7) points += 50;
         return points;
     },
 

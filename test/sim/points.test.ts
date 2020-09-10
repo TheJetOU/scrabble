@@ -45,6 +45,16 @@ describe("Points", () => {
                 ]);
                 expect(points).toEqual(24);
             });
+            it("should ignore modifiers if Square#modifierUsed is true", () => {
+                const square = new Square("A4", "D");
+                square.modifierUsed = true;
+                const points = Points.calculatePoints("DAB", [
+                    square,
+                    new Square("A5", "A"),
+                    new Square("A6", "B"),
+                ]);
+                expect(points).toEqual(6);
+            });
         });
         it("should calculate correctly", () => {
             const points = Points.calculatePoints("AE", [
