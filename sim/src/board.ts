@@ -90,12 +90,12 @@ export class Board {
                 );
             }
             this.squares[nextSquare.cell].tile = tiles[idx];
+            if (this.modifiersUsed.has(nextSquare.type)) {
+                nextSquare.modifierUsed = true;
+            }
             if (nextSquare.type !== "regular") {
                 this.log.std(`Modifier ${nextSquare.type} used!`);
                 this.modifiersUsed.add(nextSquare.type);
-            }
-            if (this.modifiersUsed.has(nextSquare.type)) {
-                nextSquare.modifierUsed = true;
             }
             squaresUsed.push(nextSquare);
         }

@@ -39,11 +39,11 @@ const LETTER_POINTS: { [letter: string]: number } = {
 } as const;
 
 export const Points = {
-    /**
-     * @param squareType [Square Type -> [letter that hit it]][]
-     */
-    calculatePoints(word: string, squares: Square[]) {
-        let points = word
+    calculatePoints(squares: Square[]) {
+        let points = squares
+            .map((square) => square.tile)
+            .join("")
+            .replace(/BLANK/g, " ")
             .split("")
             .reduce((prev, cur) => prev + Points.letter(cur), 0);
         // Word multipliers are applied last, so move them to the end

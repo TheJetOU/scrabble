@@ -36,8 +36,16 @@ export class Game {
      *  and if the main word reads top-to-bottom
      */
     move(tiles: Tile[], startingCell: string) {
-        // TODO: handle blank tiles
-        if (!tiles.every((tile) => this.curPlayer.tiles.includes(tile))) {
+        const notInPlayerRack: Tile[] = [];
+        for (const tile of tiles) {
+            if (!this.curPlayer.tiles.includes(tile)) {
+                notInPlayerRack.push(tile);
+            }
+        }
+        const playerBlankTiles = this.curPlayer.tiles.filter(
+            (tile) => tile === "BLANK"
+        );
+        if (notInPlayerRack.length > playerBlankTiles.length) {
             return this.curPlayer.log.error(
                 `You attmped to use tiles you don't have`
             );
@@ -45,18 +53,29 @@ export class Game {
         const result = this.board.move(this.curPlayer, tiles, startingCell);
         if (!result) return;
         const { squaresUsed, word } = result;
-        const points = Points.calculatePoints(word, squaresUsed);
+        const points = Points.calculatePoints(
+            squaresUsed.map((square) => {
+                if (notInPlayerRack.includes(square.tile!)) {
+                    square.tile = "BLANK";
+                }
+                return square;
+            })
+        );
         this.curPlayer.points += points;
         // TODO: tile should have parens if it was already on board
         // and it should be small case if it was initally a blank tile
         this.log.important(
             `${this.curPlayer.name} ${word}: ${startingCell} +${points}`
         );
+        this.curPlayer.tiles = this.curPlayer.tiles.filter(
+            (tile) => !tiles.includes(tile)
+        );
         const newTiles = this.tiles.giveRandomTiles(
             this.curPlayer,
             tiles.length
         );
-        if (!newTiles.length && this.curPlayer.tiles.length === tiles.length) {
+        // TODO: alternate win conditions
+        if (!newTiles.length && !this.curPlayer.tiles.length) {
             return this.win(this.curPlayer);
         }
         this.curPlayer = this.nextPlayer();
