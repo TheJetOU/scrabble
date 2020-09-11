@@ -48,36 +48,33 @@ export class Bag {
     }
 
     exchangeTiles(player: Player, tiles: Tile[]) {
-        if (tiles.length > 7 && tiles.length < 1) {
+        if (tiles.length > 7 || tiles.length < 1) {
             player.log.error("Can only exchange one to seven tiles");
+            return false;
         }
-        const tilesLeft = Object.values(this.bag).reduce(
-            (prev, cur) => prev + cur,
-            0
-        );
-        if (tiles.length > tilesLeft) {
+        const remainingTiles = this.remainingTiles;
+        if (tiles.length > remainingTiles) {
             player.log.error(
                 "Trying to take more tiles than available in the bag"
             );
+            return false;
         }
-        if (tilesLeft < 6) {
+        if (remainingTiles <= 6) {
             player.log.error(
                 "Cannot exchange tiles if six or fewer tiles remain"
             );
+            return false;
         }
         this.log.important(`${player.name} exchanged ${tiles.length} tiles`);
         this.giveRandomTiles(player, tiles.length);
-        for (const tile of tiles) {
-            this.bag[tile] -= 1;
-        }
+        return true;
     }
 
     giveRandomTiles(player: Player, n: number) {
         const tiles: Tile[] = [];
         for (let i = 0; i < n; i++) {
-            const randomNumber = Math.floor(Math.random() * 25);
             const [tile, left] = (Object.entries(this.bag) as [Tile, number][])[
-                randomNumber
+                Math.floor(Math.random() * 25)
             ];
             if (left === 0) {
                 i--;
@@ -89,5 +86,12 @@ export class Bag {
         }
         this.log.important(`${player.name} received ${tiles.join(", ")} tiles`);
         return tiles;
+    }
+
+    get remainingTiles() {
+        return Object.values(Object.assign(this.bag, {})).reduce(
+            (prev, cur) => prev + cur,
+            0
+        );
     }
 }

@@ -6,12 +6,12 @@ import { Dictionary } from "./dictionary";
 import { Player, createPlayer } from "./player";
 
 export class Game {
-    private readonly board: Board;
-    private readonly tiles: Bag;
-    readonly players: Map<string, Player> = new Map();
+    private readonly board;
+    private readonly tiles;
+    readonly players = new Map<string, Player>();
     readonly turnOrder: Map<string, Player>;
-    readonly log: Log = new Log();
-    curPlayer: Player;
+    readonly log = new Log();
+    curPlayer;
     constructor(playerNames: string[]) {
         for (const playerName of playerNames) {
             this.players.set(playerName, createPlayer(playerName));
